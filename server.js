@@ -9,7 +9,7 @@ app.use(cors());
 app.use(
     "/api/proxy",
     createProxyMiddleware({
-        target: "http://113.30.191.219:8001", // Change this to your HTTP API
+        target: "http://5.180.181.103:8001", // Change this to your HTTP API
         changeOrigin: true,
         secure: false,
         ws: true,  // Enables WebSocket proxying
