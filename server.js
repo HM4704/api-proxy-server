@@ -5,6 +5,17 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 
+// install
+// npm install express http-proxy-middleware cors
+//
+// start:
+// node server.js
+//
+// or:
+// npm install -g nodemon
+// nodemon server.js
+
+
 // Proxy API requests
 app.use(
     "/api/proxy",

@@ -1,0 +1,12 @@
+[Unit]
+Description=Fetch Node Info Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/fetch_node_info.sh
+Restart=always
+User=pi
+WorkingDirectory=/usr/local/bin
+
+[Install]
+WantedBy=multi-user.target
