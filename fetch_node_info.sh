@@ -3,8 +3,10 @@
 # poll node_info periodically to keep the proxy server alive
 
 # install:
-# sudo cp fetch_node:info.sh  /usr/local/bin
+# sudo cp fetch_node_info.sh  /usr/local/bin
 # sudo cp fetch-node-info.service /etc/systemd/system
+# sudo touch /var/log/node_info.log
+# sudo chmod 666 /var/log/node_info.log
 #
 # sudo systemctl daemon-reload
 # sudo systemctl enable fetch-node-info
