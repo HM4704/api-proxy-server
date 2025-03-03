@@ -18,6 +18,8 @@ app.use(cors());
 //const DEFAULT_TARGET = "http://5.180.181.103:8001"; // Set your default backend
 const DEFAULT_TARGET = "http://192.168.178.35:8000"; // Set your default backend
 
+require("events").EventEmitter.defaultMaxListeners = 50; // Increase limit if needed
+
 // Create a single proxy instance that we can reuse
 const proxyMiddleware = createProxyMiddleware({
     target: DEFAULT_TARGET,
@@ -36,7 +38,11 @@ const proxyMiddleware = createProxyMiddleware({
 app.use("/api/proxy", proxyMiddleware);
 
 // Handle WebSocket upgrades explicitly
-app.on("upgrade", proxyMiddleware.upgrade);
+//app.on("upgrade", proxyMiddleware.upgrade);
+app.on("upgrade", (req, socket, head) => {
+    console.log("Handling WebSocket upgrade...");
+    proxyMiddleware.upgrade(req, socket, head);
+});
 
 // Start the server
 const PORT = 3001;
