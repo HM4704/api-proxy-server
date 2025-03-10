@@ -15,10 +15,8 @@ app.use(cors());
 // npm install -g nodemon
 // nodemon server.js
 
-//const DEFAULT_TARGET = "http://5.180.181.103:8001"; // Set your default backend
-const DEFAULT_TARGET = "http://192.168.178.35:8000"; // Set your default backend
-
-require("events").EventEmitter.defaultMaxListeners = 50; // Increase limit if needed
+const DEFAULT_TARGET = "http://5.180.181.103:8001"; // Set your default backend
+//const DEFAULT_TARGET = "http://192.168.178.35:8000"; // Set your default backend
 
 // Create a single proxy instance that we can reuse
 const proxyMiddleware = createProxyMiddleware({
@@ -27,20 +25,23 @@ const proxyMiddleware = createProxyMiddleware({
     secure: false,
     ws: true, // WebSocket support
     pathRewrite: { "^/api/proxy": "" },
-    onProxyReq: (proxyReq, req) => {
-        const target = req.headers["x-target-url"] || DEFAULT_TARGET;
-        proxyReq.setHeader("X-Forwarded-Target", target); // Inform backend about the target
+    logLevel: "debug",  // Enable debug logging
+    logger: console,
+    onProxyReqWs: (proxyReq, req, socket, options) => {
+        console.log(`WebSocket connection request to: ${req.url}`);
     },
-    router: (req) => req.headers["x-target-url"] || DEFAULT_TARGET // Dynamic target
+    onError: (err, req, res) => {
+        console.error(`Proxy error: ${err.message}`);
+    },
+    router: (req) => req.headers["x-target-url"] || DEFAULT_TARGET
 });
 
 // Attach the proxy middleware
 app.use("/api/proxy", proxyMiddleware);
 
-// Handle WebSocket upgrades explicitly
-//app.on("upgrade", proxyMiddleware.upgrade);
+// Explicitly handle WebSocket upgrades
 app.on("upgrade", (req, socket, head) => {
-    console.log("Handling WebSocket upgrade...");
+    console.log(`WebSocket upgrade request received for: ${req.url}`);
     proxyMiddleware.upgrade(req, socket, head);
 });
 
