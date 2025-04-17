@@ -14,6 +14,11 @@ app.use(cors());
 // or:
 // npm install -g nodemon
 // nodemon server.js
+//
+// or:
+// pm2 start server.js --name proxy-server
+// pm2 save
+// pm2 startup
 
 const DEFAULT_TARGET = "http://5.180.181.103:8001"; // Set your default backend
 //const DEFAULT_TARGET = "http://192.168.178.35:8000"; // Set your default backend
